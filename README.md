@@ -1,33 +1,11 @@
-<div align="center">
-   <img src="./.images/ink-logo-glow.svg" alt="ink!" height="136" />
-</div>
+# Testing Events Reference Implementation
 
-This repository contains a set of example contracts for ink!.
+Capturing events for ink! end-to-end tests in particular is not clearly documented, nor are there clear reference implementations. This contract contains a minimalist flipflop contract that emits two different events when called. It contains both unit and e2e test modules illustrating one way to check for multiple events in both testing environments.
 
-Have a look at the different examples to better understand how to use ink! to build your own Substrate smart contracts.
+The end-to-end event test/check is awkward and could certainly be improved on. This reference may not be appropriate for it's own example project in the ink-examples repo, so it should be up to this repo's maintainers/seasoned-folk to figure out where to put it, if at all.
 
-## Preparation
+Notes:
 
-For building the example smart contracts found in this folder you will need to have [`cargo-contract`](https://github.com/paritytech/cargo-contract) installed.
+- e2e: depending on the field number and content of an event struct, the byte range in the `&event` that is decoded may be either `&event[34..]` or `&event[35..]`. This is a point to improve on, dealing with the prepending bytes that don't pertain to the field values.
 
-```
-cargo install cargo-contract --force
-```
-
-We use the `--force` to update to the most recent `cargo-contract` version.
-
-## Build example contract and generate the contracts metadata
-
-To build a single example and generate the contracts Wasm file, navigate to the root of the smart contract and run the following command:
-
-`cargo contract build`
-
-You should now have an optimized `<contract-name>.wasm` file, a `metadata.json` file and a `<contract-name>.contract` file in the `target` folder of your contract.
-The `.contract` file combines the Wasm and metadata into one file and can be used for instantiation.
-
-## License
-
-The examples in this folder are released into the public domain.
-We hope they help you build something great with ink!.
-
-See the [LICENSE file](LICENSE) in this folder for more details.
+- There is probably a way to filter for event types simultaneously, instead of one at a time (that is, keeping track of which events were caught by using a boolean and assert).
